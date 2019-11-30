@@ -1,0 +1,67 @@
+/*
+ * @Author: your name
+ * @Date: 2019-11-30 11:11:47
+ * @LastEditTime: 2019-11-30 11:37:28
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /test/main.cpp
+ */
+ #include<stdio.h>
+ #include<stdlib.h>
+ #include<pthread.h>
+#include <iostream>
+#include <cstdio>
+#include <chrono>
+#include <algorithm>
+#include <chrono>
+#include <mutex>
+#include <cmath>
+ #include <unistd.h>
+using namespace std;
+struct STRUCT_1
+{
+	int _int_t;
+};
+
+struct ALL
+{
+	struct STRUCT_1 *stu;
+};
+struct STRUCT_1 stu;
+struct ALL all_t;
+
+void run(struct ALL all)
+{
+	while(1)
+	{
+		std::cout<<"_int_t value :="<< all.stu->_int_t<<std::endl;
+		sleep(5);
+	}
+}
+void* change_a(void *)
+{
+	int i=1;
+	std::cout<<"pthread start...."<<std::endl;
+	while(1)
+	{
+		all_t.stu->_int_t=i++;
+		sleep(3);
+		std::cout<<"current value :="<<all_t.stu->_int_t<< std::endl;
+	}
+}
+int main(void)
+{
+	all_t.stu=&stu;
+	std::cout<<"test start.."<<std::endl;
+	std::cout<<"build pthread change _int_t value"<<std::endl;
+	pthread_t tids;
+   	 int ret = pthread_create(&tids, NULL, change_a, NULL);
+    if (ret != 0)
+    {
+        std::cout << "pthread_create error: error_code=" << ret << std::endl;
+    }
+	run(all_t);
+	
+}
+
+
